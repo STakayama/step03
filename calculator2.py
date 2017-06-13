@@ -34,11 +34,11 @@ def readDiv(line, index):
     return token, index + 1
 
 
-def readPar_f(line, index):
+def readPar_f(line, index):#(
     token = {'type': 'PAR_F'}
     return token, index + 1
 
-def readPar_l(line, index):
+def readPar_l(line, index):#)
     token = {'type': 'PAR_L'}
     return token, index + 1
 
@@ -76,41 +76,50 @@ def evaluate_first(tokens):    # *, /, . make token
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
     t_index = 1
     par_l_index=0
- #   print tokens
     while t_index < len(tokens):
-        print t_index
-       # print 'type'+tokens[t_index-1]['type']
         if tokens[t_index]['type'] == 'NUMBER':
-       #     print tokens[t_index-1]['type']
-            if tokens[t_index - 1]['type'] == 'PAR_F':
+            if tokens[t_index-1]['type'] == 'PAR_F':
                 par_tokens=[]
-                while tokens[t_index - 1]['type']!='PAR_L':
+                print 't',first_tokens
+                if first_index>1 and tokens[t_index-2]!=first_tokens[first_index-1]: #example :
+                    (token,index)=({'type':tokens[t_index-2]['type']},first_index) 
+                    first_tokens.append(token)
+                    first_index+=1
+                
+
+                while tokens[t_index]['type']!='PAR_L':
                     par_tokens.append(tokens[t_index])
                     t_index+=1
-                par_l_index=t_index+1
+                par_l_index=t_index-1
                 par_result=evaluate(par_tokens)#ok
+                
+                if 
+
                 (token,index)=({'type': 'NUMBER', 'number':par_result},first_index)
-                print 'ttt',tokens[t_index-1]
+                print 'ttt',first_index
                 tokens[par_l_index]['type']='NUMBER'
                 tokens[par_l_index]['number']=par_result 
-              #  print tokens[5],t_index-1
-                first_index += 1
+              #  print tokens[5],par_l_index
+                t_index+=1#t_index indicates )
+           #     first_index += 1
                 print 'fi:',first_index
 
 
-            elif tokens[t_index - 1]['type'] == 'PAR_L':
-                return first_tokens
+          #  elif tokens[t_index - 1]['type'] == 'PAR_L':
+          #      return first_tokens
 
 
             elif tokens[t_index - 1]['type'] == 'MULTIPLY':
-                print tokens[t_index]
+                print first_tokens[0]
                 print 'fi2:',first_index
-                (token,index)=({'type': 'NUMBER', 'number':tokens[par_l_index]['number'] * tokens[t_index]['number']},first_index)  
+                (token,index)=({'type': 'NUMBER', 'number':first_tokens[first_index-1]['number'] * tokens[t_index]['number']},first_index)  
                 first_tokens.pop()
 
             elif tokens[t_index - 1]['type'] == 'DIVIDE':
                 first_tokens.pop()
                 (token,index)=({'type': 'NUMBER', 'number':tokens[t_index-2]['number'] / tokens[t_index]['number']},first_index)
+
+
             elif tokens[t_index - 1]['type'] == 'PLUS':
                 (token,index)=({'type':'PLUS'},first_index)
                 first_tokens.append(token)
@@ -124,22 +133,22 @@ def evaluate_first(tokens):    # *, /, . make token
             else:
                 print 'Invalid syntax'
             first_tokens.append(token)
-        print tokens
+        print first_tokens
+        print t_index
+     #   print tokens
         t_index += 1
     return first_tokens
 
 
 def evaluate_second(tokens):   # +, -
     answer = 0
+    print 'second',tokens
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
     index = 1
-#    print len(tokens)
     while index < len(tokens):
- #       print tokens[index]
         if tokens[index]['type'] == 'NUMBER':
             if tokens[index - 1]['type'] == 'PLUS':
                 answer += tokens[index]['number']
-               # print tokens[index]['number']
             elif tokens[index - 1]['type'] == 'MINUS':
                 answer -= tokens[index]['number']
 
@@ -168,6 +177,7 @@ def test(line, expectedAnswer):
 def runTest():
     print "==== Test started! ===="
     print test("(1+2)*3",9)
+    print test("3*(1+2)",9)
     print "==== Test finished! ====\n"
 
 runTest()

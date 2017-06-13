@@ -68,17 +68,17 @@ def evaluate_first(tokens):    # *, /, . make token
         if tokens[t_index]['type'] == 'NUMBER':
             if tokens[t_index - 1]['type'] == 'MULTIPLY':
                 first_tokens.pop()
-                (token,index)=({'type': 'NUMBER', 'number':tokens[t_index-2]['number'] * tokens[t_index]['number']},first_index-1)  
+                (token,index)=({'type': 'NUMBER', 'number':tokens[t_index-2]['number'] * tokens[t_index]['number']},first_index)  
             elif tokens[t_index - 1]['type'] == 'DIVIDE':
                 first_tokens.pop()
-                (token,index)=({'type': 'NUMBER', 'number':tokens[t_index-2]['number'] / tokens[t_index]['number']},first_index-1)
+                (token,index)=({'type': 'NUMBER', 'number':tokens[t_index-2]['number'] / tokens[t_index]['number']},first_index)
             elif tokens[t_index - 1]['type'] == 'PLUS':
-                (token,index)=({'type':'PLUS'},first_index-1)
+                (token,index)=({'type':'PLUS'},first_index)
                 first_tokens.append(token)
                 (token,index)=({'type':'NUMBER','number':tokens[t_index]['number']},first_index)
                 first_index += 1
             elif tokens[t_index - 1]['type'] == 'MINUS':
-                (token,index)=readMinus(tokens,first_index-1)
+                (token,index)=readMinus(tokens,first_index)
                 first_tokens.append(token)
                 (token,index)=({'type':'NUMBER','number':tokens[t_index]['number']},first_index)
                 first_index += 1
@@ -112,8 +112,8 @@ def evaluate_second(tokens):   # +, -
 
 
 def evaluate(tokens):
-    first_result=evaluate_first(tokens)
-    answer=evaluate_second(first_result)
+    tokens=evaluate_first(tokens)
+    answer=evaluate_second(tokens)
     return answer
 
 
