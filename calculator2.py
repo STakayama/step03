@@ -71,7 +71,7 @@ def tokenize(line):
 
 
 
-def evaluate_zero(tokens):# evaluate ( including its internal
+def evaluate_zero(tokens):# evaluate ( including its internal OK
     zero_tokens=[]
     zero_index=1
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
@@ -125,7 +125,9 @@ def evaluate_zero(tokens):# evaluate ( including its internal
             else:
                 print 'Invalid syntax'
             zero_tokens.append(token)
+       #     print 'zero',zero_tokens
         t_index += 1
+    zero_tokens.pop(0)#delete first +
     return zero_tokens
 
 
@@ -136,19 +138,18 @@ def evaluate_first(tokens):    # *, /, . make token
     first_index = 1
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
     t_index = 1
-    par_l_index=0
     while t_index < len(tokens):
         if tokens[t_index]['type'] == 'NUMBER':
-           
-
             if tokens[t_index - 1]['type'] == 'MULTIPLY':
-                print 'fi2:',first_index
+                print 'fi2:',first_index,first_tokens
+                print 't_in',tokens[t_index]['number']*first_tokens[first_index-1]['number']
                 (token,index)=({'type': 'NUMBER', 'number':first_tokens[first_index-1]['number'] * tokens[t_index]['number']},first_index)  
                 first_tokens.pop()
 
             elif tokens[t_index - 1]['type'] == 'DIVIDE':
+                (token,index)=({'type': 'NUMBER', 'number':first_tokens[first_index-1]['number'] / tokens[t_index]['number']},first_index)
                 first_tokens.pop()
-                (token,index)=({'type': 'NUMBER', 'number':tokens[t_index-2]['number'] / tokens[t_index]['number']},first_index)
+
 
             elif tokens[t_index - 1]['type'] == 'PLUS':
                 (token,index)=({'type':'PLUS'},first_index)
@@ -156,15 +157,13 @@ def evaluate_first(tokens):    # *, /, . make token
                 (token,index)=({'type':'NUMBER','number':tokens[t_index]['number']},first_index)
                 first_index += 1
             elif tokens[t_index - 1]['type'] == 'MINUS':
-                (token,index)=readMinus(tokens,first_index-1)
+                (token,index)=readMinus(tokens,first_index)
                 first_tokens.append(token)
                 (token,index)=({'type':'NUMBER','number':tokens[t_index]['number']},first_index)
                 first_index += 1
             else:
                 print 'Invalid syntax'
             first_tokens.append(token)
-        print 'first',first_tokens
-        print t_index
      #   print tokens
         t_index += 1
     return first_tokens
@@ -210,7 +209,7 @@ def runTest():
     print test("(1+2)*3",9)
     print test("3*(1+2)",9)
     print test("3*(1+2)*2",18)
-
+    print test("(1+2)*3+2*(7*2+1)",39)
     print "==== Test finished! ====\n"
 
 runTest()
