@@ -85,11 +85,19 @@ def evaluate_zero(tokens):# evaluate ( including its internal OK
                     zero_tokens.append(token)
                     zero_index += 1
 
-
-
                 par_tokens=[]
-                before_check_index=t_index-1
-                while tokens[t_index]['type']!='PAR_L':
+                par_f_num=1
+                par_l_num=0
+                print 'all:',tokens
+                if tokens[t_index-2]['type']=='PAR_F':
+                    par_tokens.append(tokens[t_index-1])
+                    par_f_num+=1
+            #    while tokens[t_index]['type']!='PAR_L':
+                while par_f_num!=par_l_num:
+                    if tokens[t_index]['type']=='PAR_F':
+                       par_f_num+=1
+                    if tokens[t_index]['type']=='PAR_L':
+                       par_l_num+=1
                     par_tokens.append(tokens[t_index])
                     t_index+=1
                 par_l_index=t_index-1
