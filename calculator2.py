@@ -54,7 +54,6 @@ def tokenize(line):
         elif line[index]==')':
             (token,index)=readPar_l(line,index)
 
-
         elif line[index] == '+':
             (token, index) = readPlus(line, index)
         elif line[index] == '-':
@@ -71,7 +70,7 @@ def tokenize(line):
 
 
 
-def evaluate_zero(tokens):# evaluate ( including its internal OK
+def evaluate_par(tokens):# evaluate ( including its internal OK
     zero_tokens=[]
     zero_index=1
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
@@ -88,7 +87,6 @@ def evaluate_zero(tokens):# evaluate ( including its internal OK
                 par_tokens=[]
                 par_f_num=1
                 par_l_num=0
-                print 'all:',tokens
                 par_check=t_index-2
 
                 while tokens[par_check]['type']=='PAR_F':
@@ -110,7 +108,6 @@ def evaluate_zero(tokens):# evaluate ( including its internal OK
                     t_index+=1
                 par_l_index=t_index-1
                 par_result=evaluate(par_tokens)#ok
-                print 'par:',par_result,par_tokens
                 (token,index)=({'type':'NUMBER','number':par_result},zero_index) 
                 zero_index+=1
                 
@@ -142,7 +139,6 @@ def evaluate_zero(tokens):# evaluate ( including its internal OK
             else:
                 print 'Invalid syntax'
             zero_tokens.append(token)
-       #     print 'zero',zero_tokens
         t_index += 1
     zero_tokens.pop(0)#delete first +
 
@@ -151,7 +147,7 @@ def evaluate_zero(tokens):# evaluate ( including its internal OK
 
 
 
-def evaluate_first(tokens):    # *, /, . make token
+def evaluate_mul_div(tokens):    # *, /, . make token
     first_tokens = []
     first_index = 0
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
@@ -159,8 +155,6 @@ def evaluate_first(tokens):    # *, /, . make token
     while t_index < len(tokens):
         if tokens[t_index]['type'] == 'NUMBER':
             if tokens[t_index - 1]['type'] == 'MULTIPLY':
-                print 'fi2:',first_index,first_tokens
-                print 't_in',t_index,tokens,tokens[t_index]['number']*first_tokens[first_index-1]['number']
                 (token,index)=({'type': 'NUMBER', 'number':first_tokens[first_index-1]['number'] * tokens[t_index]['number']},first_index)  
                 first_tokens.pop()
 
@@ -185,14 +179,12 @@ def evaluate_first(tokens):    # *, /, . make token
             else:
                 print 'Invalid syntax'
             first_tokens.append(token)
-     #   print tokens
         t_index += 1
     return first_tokens
 
 
-def evaluate_second(tokens):   # +, -
+def evaluate_plus_minus(tokens):   # +, -
     answer = 0
-    print 'second',tokens
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
     index = 1
     while index < len(tokens):
@@ -209,9 +201,9 @@ def evaluate_second(tokens):   # +, -
 
 
 def evaluate(tokens):
-    tokens=evaluate_zero(tokens)
-    tokens=evaluate_first(tokens)
-    answer=evaluate_second(tokens)
+    tokens=evaluate_par(tokens)
+    tokens=evaluate_mul_div(tokens)
+    answer=evaluate_plus_minus(tokens)
     return answer
 
 
