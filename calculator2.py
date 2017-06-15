@@ -234,7 +234,7 @@ def runTest():
     print test("(1+2)*3+2*1",11)
     print test("(1+2)*3+2*(7*2+1)",39)  #3*3+2*15 new tokens
     print test("((1+2)+3)*2+1",13)
-    #print test("(((1+2)*2)+1)*2")
+    print test("(((1+2)*2)+1)*2",14)
     print "==== Test finished! ====\n"
 
 runTest()
