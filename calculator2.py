@@ -71,7 +71,7 @@ def tokenize(line):
 
 
 def evaluate_par(tokens):# evaluate ( including its internal OK
-    zero_tokens=[]
+    new_tokens=[]
     zero_index=1
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
     t_index=1
@@ -81,7 +81,7 @@ def evaluate_par(tokens):# evaluate ( including its internal OK
 
                 if t_index>1:#*( , /( etc use read... other def
                     (token,index)=({'type':tokens[t_index-2]['type']},zero_index)
-                    zero_tokens.append(token)
+                    new_tokens.append(token)
                     zero_index += 1
 
                 par_tokens=[]
@@ -113,36 +113,36 @@ def evaluate_par(tokens):# evaluate ( including its internal OK
                 
             elif tokens[t_index - 1]['type'] == 'MULTIPLY':
                 (token,index)=readMul(tokens,zero_index-1)
-                zero_tokens.append(token)
+                new_tokens.append(token)
                 (token,index)=({'type':'NUMBER','number':tokens[t_index]['number']},zero_index)
                 zero_index += 1
             
                         
             elif tokens[t_index - 1]['type'] == 'DIVIDE':
                 (token,index)=readDiv(tokens,zero_index-1)
-                zero_tokens.append(token)
+                new_tokens.append(token)
                 (token,index)=({'type':'NUMBER','number':tokens[t_index]['number']},zero_index)
                 zero_index += 1
 
             elif tokens[t_index - 1]['type'] == 'PLUS':
                 (token,index)=readPlus(tokens,zero_index-1)
-                zero_tokens.append(token)
+                new_tokens.append(token)
                 (token,index)=({'type':'NUMBER','number':tokens[t_index]['number']},zero_index)
                 zero_index += 1
             
             elif tokens[t_index - 1]['type'] == 'MINUS':
                 (token,index)=readMinus(tokens,zero_index-1)
-                zero_tokens.append(token)
+                new_tokens.append(token)
                 (token,index)=({'type':'NUMBER','number':tokens[t_index]['number']},zero_index)
                 zero_index += 1                
                 
             else:
                 print 'Invalid syntax'
-            zero_tokens.append(token)
+            new_tokens.append(token)
         t_index += 1
-    zero_tokens.pop(0)#delete first +
+    new_tokens.pop(0)#delete first +
 
-    return zero_tokens
+    return new_tokens
 
 
 
