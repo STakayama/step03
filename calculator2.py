@@ -148,39 +148,39 @@ def evaluate_par(tokens):# evaluate ( including its internal OK
 
 
 def evaluate_mul_div(tokens):    # *, /, . make token
-    first_tokens = []
+    new_tokens = []
     first_index = 0
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
     t_index = 1
     while t_index < len(tokens):
         if tokens[t_index]['type'] == 'NUMBER':
             if tokens[t_index - 1]['type'] == 'MULTIPLY':
-                (token,index)=({'type': 'NUMBER', 'number':first_tokens[first_index-1]['number'] * tokens[t_index]['number']},first_index)  
-                first_tokens.pop()
+                (token,index)=({'type': 'NUMBER', 'number':new_tokens[first_index-1]['number'] * tokens[t_index]['number']},first_index)  
+                new_tokens.pop()
 
             elif tokens[t_index - 1]['type'] == 'DIVIDE':
-                (token,index)=({'type': 'NUMBER', 'number':first_tokens[first_index-1]['number'] / tokens[t_index]['number']},first_index)
-                first_tokens.pop()
+                (token,index)=({'type': 'NUMBER', 'number':new_tokens[first_index-1]['number'] / tokens[t_index]['number']},first_index)
+                new_tokens.pop()
 
             elif tokens[t_index - 1]['type'] == 'PLUS':
                 first_index += 1
                 (token,index)=readPlus(tokens,first_index)
-                first_tokens.append(token)
+                new_tokens.append(token)
                 first_index += 1
                 (token,index)=({'type':'NUMBER','number':tokens[t_index]['number']},first_index)
 
             elif tokens[t_index - 1]['type'] == 'MINUS':
                 first_index += 1
                 (token,index)=readMinus(tokens,first_index)
-                first_tokens.append(token)
+                new_tokens.append(token)
                 first_index += 1
                 (token,index)=({'type':'NUMBER','number':tokens[t_index]['number']},first_index)
 
             else:
                 print 'Invalid syntax'
-            first_tokens.append(token)
+            new_tokens.append(token)
         t_index += 1
-    return first_tokens
+    return new_tokens
 
 
 def evaluate_plus_minus(tokens):   # +, -
