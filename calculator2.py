@@ -89,9 +89,17 @@ def evaluate_zero(tokens):# evaluate ( including its internal OK
                 par_f_num=1
                 par_l_num=0
                 print 'all:',tokens
-                if tokens[t_index-2]['type']=='PAR_F':
-                    par_tokens.append(tokens[t_index-1])
+                par_check=t_index-2
+
+                while tokens[par_check]['type']=='PAR_F':
+                    par_tokens.append(tokens[par_check])
                     par_f_num+=1
+                    par_check-=1
+
+                
+           #     if tokens[t_index-2]['type']=='PAR_F':
+            #        par_tokens.append(tokens[t_index-1])
+             #       par_f_num+=1
             #    while tokens[t_index]['type']!='PAR_L':
                 while par_f_num!=par_l_num:
                     if tokens[t_index]['type']=='PAR_F':
@@ -226,6 +234,7 @@ def runTest():
     print test("(1+2)*3+2*1",11)
     print test("(1+2)*3+2*(7*2+1)",39)  #3*3+2*15 new tokens
     print test("((1+2)+3)*2+1",13)
+    #print test("(((1+2)*2)+1)*2")
     print "==== Test finished! ====\n"
 
 runTest()
