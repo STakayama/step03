@@ -70,43 +70,48 @@ def tokenize(line):
 
 
 
+def deal_in_par(t_index,tokens,index,new_tokens,par_result): #evaluate in ()
+
+
+
+    par_tokens=[]
+    par_f_num=1
+    par_l_num=0
+    par_check=t_index-2
+
+    while tokens[par_check]['type']=='PAR_F':
+        par_tokens.append(tokens[par_check])
+        par_f_num+=1
+        par_check-=1
+
+    (token,index)=({'type':tokens[par_check]['type']},index)
+    new_tokens.append(token)
+    index += 1
+                
+    while par_f_num!=par_l_num:
+        if tokens[t_index]['type']=='PAR_F':
+            par_f_num+=1
+        if tokens[t_index]['type']=='PAR_L':
+            par_l_num+=1
+        par_tokens.append(tokens[t_index])
+        t_index+=1
+    par_l_index=t_index-1
+
+    par_result=evaluate(par_tokens)#ok
+
+    return t_index,tokens,index,new_tokens,par_result    
+
+
 def evaluate_par(tokens):# evaluate ( including its internal OK
     new_tokens=[]
     index=1
     tokens.insert(0, {'type': 'PLUS'}) # Insert a dummy '+' token
     t_index=1
+    par_result=0
     while t_index < len(tokens):
         if tokens[t_index]['type'] == 'NUMBER':
             if tokens[t_index-1]['type'] == 'PAR_F':
-
-                if t_index>1:#*( , /( etc use read... other def
-                    (token,index)=({'type':tokens[t_index-2]['type']},index)
-                    new_tokens.append(token)
-                    index += 1
-
-                par_tokens=[]
-                par_f_num=1
-                par_l_num=0
-                par_check=t_index-2
-
-                while tokens[par_check]['type']=='PAR_F':
-                    par_tokens.append(tokens[par_check])
-                    par_f_num+=1
-                    par_check-=1
-
-                (token,index)=({'type':tokens[par_check]['type']},index)
-                new_tokens.append(token)
-                index += 1
-                
-                while par_f_num!=par_l_num:
-                    if tokens[t_index]['type']=='PAR_F':
-                       par_f_num+=1
-                    if tokens[t_index]['type']=='PAR_L':
-                       par_l_num+=1
-                    par_tokens.append(tokens[t_index])
-                    t_index+=1
-                par_l_index=t_index-1
-                par_result=evaluate(par_tokens)#ok
+                t_index,tokens,index,new_tokens,par_result=deal_in_par(t_index,tokens,index,new_tokens,par_result)
                 (token,index)=({'type':'NUMBER','number':par_result},index) 
                 index+=1
                 
