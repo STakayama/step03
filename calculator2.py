@@ -94,11 +94,10 @@ def evaluate_par(tokens):# evaluate ( including its internal OK
                     par_f_num+=1
                     par_check-=1
 
+                (token,index)=({'type':tokens[par_check]['type']},index)
+                new_tokens.append(token)
+                index += 1
                 
-           #     if tokens[t_index-2]['type']=='PAR_F':
-            #        par_tokens.append(tokens[t_index-1])
-             #       par_f_num+=1
-            #    while tokens[t_index]['type']!='PAR_L':
                 while par_f_num!=par_l_num:
                     if tokens[t_index]['type']=='PAR_F':
                        par_f_num+=1
@@ -219,14 +218,17 @@ def test(line, expectedAnswer):
 # Add more tests to this function :)
 def runTest():
     print "==== Test started! ===="
+    print test("1+2*3",7)
     print test("(1+2)*3",9)
     print test("3*(1+2)",9)
     print test("3*(1+2)*2",18)
     print test("(1+2)*3+2+1",12)
     print test("(1+2)*3+2*1",11)
-    print test("(1+2)*3+2*(7*2+1)",39)  #3*3+2*15 new tokens
+    print test("(1+2)*3+2*(7*2+1)",39)  
     print test("((1+2)+3)*2+1",13)
     print test("(((1+2)*2)+1)*2",14)
+    print test("(1+2)*((1+3)*2)",24)
+    print test("(1+2)*(((1+3)*2)+2)",30)
     print "==== Test finished! ====\n"
 
 runTest()
